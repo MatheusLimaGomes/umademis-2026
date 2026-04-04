@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kit de Voz 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tokens.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+
+    <header class="hero glass">
+      <div class="hero-mark" aria-label="Imagem oficial do congresso">
+        <img
+          id="hero-official-logo"
+          class="hero-logo"
+          src="assets/logo-congresso.transparent.png"
+          alt="Identidade oficial Jesus Unico Senhor"
+          loading="eager"
+        />
+        <span class="hero-logo-fallback" id="hero-logo-fallback">JESUS</span>
+      </div>
+      <div class="hero-content">
+        <p class="hero-kicker">Congresso Umademis 2026</p>
+        <h1 class="hero-title">Jesus Unico Senhor</h1>
+        <p class="hero-subtitle">Deuteronomio 6:4</p>
+        <p class="hero-screen-title">Kit de Voz 2026</p>
+      </div>
+      <div class="hero-mark hero-mark-right" aria-label="Logo da Umademis">
+        <img
+          id="hero-umademis-logo"
+          class="hero-logo"
+          src="assets/logo-umademis.transparent.png"
+          alt="Logo da Umademis"
+          loading="eager"
+        />
+        <span class="hero-logo-fallback" id="hero-umademis-fallback">UMADEMIS</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="playlist glass" aria-label="Lista de naipes">
+        <article class="voice-card" data-voice="soprano">
+          <h2>Soprano</h2>
+          <ul>
+            <li><button class="track" data-title="Soprano - Jesus" data-url="https://drive.google.com/file/d/1Mfd4KQtKMUY9dqzd1F3AVP-Jd_iMJOoA/view?usp=share_link">Jesus</button></li>
+            <li><button class="track" data-title="Soprano - Portais da Gloria" data-url="https://drive.google.com/file/d/16nrDcQcFXU8X48zbcj-WIhjlC8hcMb3k/view?usp=sharing">Portais da Gloria</button></li>
+            <li><button class="track" data-title="Soprano - Luz Divina" data-url="https://drive.google.com/drive/folders/1ozWPvB53wlBqoVrqVk9F8KXF6yDNfDNd?usp=share_link">Luz Divina</button></li>
+            <li><button class="track" data-title="Soprano - Santo" data-url="https://youtu.be/XcYoHr5wN2s?si=nS3zC3NoFXyBxKHO">Santo</button></li>
+          </ul>
+        </article>
+
+        <article class="voice-card" data-voice="contralto">
+          <h2>Contralto</h2>
+          <ul>
+            <li><button class="track" data-title="Contralto - Jesus" data-url="https://drive.google.com/file/d/1GmYLWd9T8p2GtAx62HnPFvu_wRtxXutO/view?usp=share_link">Jesus</button></li>
+            <li><button class="track" data-title="Contralto - Portais da Gloria" data-url="https://drive.google.com/file/d/16nrDcQcFXU8X48zbcj-WIhjlC8hcMb3k/view?usp=sharing">Portais da Gloria</button></li>
+            <li><button class="track" data-title="Contralto - Luz Divina" data-url="https://drive.google.com/drive/folders/1ozWPvB53wlBqoVrqVk9F8KXF6yDNfDNd?usp=share_link">Luz Divina</button></li>
+            <li><button class="track" data-title="Contralto - Santo" data-url="https://youtu.be/2Fz9fcqQbug?si=Dw0BgXreLjbJupwc">Santo</button></li>
+          </ul>
+        </article>
+
+        <article class="voice-card" data-voice="tenor">
+          <h2>Tenor</h2>
+          <ul>
+            <li><button class="track" data-title="Tenor - Jesus" data-url="https://drive.google.com/file/d/1GQpbOQEoTyzuxGsZK1BDqlvY2AkDW0dY/view?usp=share_link">Jesus</button></li>
+            <li><button class="track" data-title="Tenor - Portais da Gloria" data-url="https://drive.google.com/file/d/16nrDcQcFXU8X48zbcj-WIhjlC8hcMb3k/view?usp=sharing">Portais da Gloria</button></li>
+            <li><button class="track" data-title="Tenor - Luz Divina" data-url="https://drive.google.com/drive/folders/1d1-bVGwdRp8GZrePVJL-GMdUOxQ5RbM8?usp=share_link">Luz Divina</button></li>
+            <li><button class="track" data-title="Tenor - Santo" data-url="https://youtu.be/oLGJ8Ny3Asw?si=1WzXmpZfyP9CDEcw">Santo</button></li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="player glass" aria-label="Preview da midia">
+        <div class="player-header">
+          <h2 id="player-title">Selecione uma faixa</h2>
+          <a id="open-link" href="#" target="_blank" rel="noopener noreferrer">Abrir original</a>
+        </div>
+
+        <div class="player-frame-wrap">
+          <iframe
+            id="preview-frame"
+            title="Preview de audio"
+            loading="lazy"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+          <div id="player-hint" class="player-hint">
+            Toque em uma musica para abrir o preview aqui na pagina.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
