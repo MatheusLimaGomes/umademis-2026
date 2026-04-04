@@ -1,0 +1,44 @@
+name: Auto Merge Approved PR
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge-approved-feature-pr:
+    name: Auto merge approved feature PR
+    if: github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'feature/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge PR after approval
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = context.payload.pull_request.number;
+
+            const pr = await github.rest.pulls.get({ owner, repo, pull_number });
+
+            if (pr.data.state !== 'open') {
+              core.info(`PR #${pull_number} nao esta aberto. Nada a fazer.`);
+              return;
+            }
+
+            try {
+              await github.rest.pulls.merge({
+                owner,
+                repo,
+                pull_number,
+                merge_method: 'squash'
+              });
+              core.info(`PR #${pull_number} mesclado com sucesso.`);
+            } catch (error) {
+              core.warning(`Nao foi possivel mesclar PR #${pull_number}: ${error.message}`);
+              throw error;
+            }
