@@ -1,0 +1,167 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "project": {
+    "name": "umademis-congresso-2026",
+    "version": "1.0.0"
+  },
+  "color": {
+    "brand": {
+      "primary": { "value": "#1F4E63" },
+      "primaryHover": { "value": "#285F79" },
+      "primaryActive": { "value": "#193E50" },
+      "secondary": { "value": "#6F8F9D" }
+    },
+    "neutral": {
+      "0": { "value": "#FFFFFF" },
+      "50": { "value": "#F3F7F9" },
+      "100": { "value": "#E2EBF0" },
+      "200": { "value": "#AABCC4" },
+      "700": { "value": "#5E788C" },
+      "900": { "value": "#0F2A3B" }
+    },
+    "text": {
+      "default": { "value": "{color.neutral.0}" },
+      "muted": { "value": "#DCE7ED" },
+      "onBrand": { "value": "{color.neutral.0}" },
+      "link": { "value": "#F1F7FB" },
+      "linkHover": { "value": "#FFFFFF" }
+    },
+    "surface": {
+      "page": { "value": "#1F4E63" },
+      "card": { "value": "rgba(255, 255, 255, 0.12)" },
+      "header": { "value": "{color.brand.primary}" },
+      "section": { "value": "rgba(255, 255, 255, 0.08)" }
+    },
+    "border": {
+      "subtle": { "value": "rgba(255, 255, 255, 0.28)" },
+      "strong": { "value": "{color.brand.secondary}" },
+      "focus": { "value": "#AABCC4" }
+    },
+    "voice": {
+      "soprano": { "value": "#AABCC4" },
+      "contralto": { "value": "#C4D3DA" },
+      "tenor": { "value": "#DCE7ED" }
+    },
+    "status": {
+      "info": { "value": "#0A6B9B" },
+      "success": { "value": "#1F7A4C" },
+      "warning": { "value": "#9C6B00" },
+      "error": { "value": "#B3261E" }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "heading": { "value": "Bebas Neue, Anton, Montserrat, Segoe UI, Arial, sans-serif" },
+      "body": { "value": "Montserrat, Segoe UI, Arial, sans-serif" }
+    },
+    "fontWeight": {
+      "regular": { "value": 400 },
+      "medium": { "value": 500 },
+      "semiBold": { "value": 600 },
+      "bold": { "value": 700 }
+    },
+    "fontSize": {
+      "xs": { "value": "0.75rem" },
+      "sm": { "value": "0.875rem" },
+      "md": { "value": "1rem" },
+      "lg": { "value": "1.25rem" },
+      "xl": { "value": "1.5rem" },
+      "2xl": { "value": "2rem" }
+    },
+    "lineHeight": {
+      "tight": { "value": 1.2 },
+      "normal": { "value": 1.5 },
+      "relaxed": { "value": 1.7 }
+    },
+    "letterSpacing": {
+      "normal": { "value": "0" },
+      "wide": { "value": "0.02em" },
+      "wider": { "value": "0.06em" }
+    }
+  },
+  "space": {
+    "0": { "value": "0" },
+    "1": { "value": "0.25rem" },
+    "2": { "value": "0.5rem" },
+    "3": { "value": "0.75rem" },
+    "4": { "value": "1rem" },
+    "5": { "value": "1.25rem" },
+    "6": { "value": "1.5rem" },
+    "8": { "value": "2rem" },
+    "10": { "value": "2.5rem" },
+    "12": { "value": "3rem" },
+    "16": { "value": "4rem" }
+  },
+  "size": {
+    "maxWidth": {
+      "content": { "value": "72rem" }
+    },
+    "headerHeight": {
+      "mobile": { "value": "4rem" },
+      "desktop": { "value": "5rem" }
+    },
+    "touchTarget": {
+      "minimum": { "value": "2.75rem" }
+    }
+  },
+  "radius": {
+    "none": { "value": "0" },
+    "sm": { "value": "0.375rem" },
+    "md": { "value": "0.625rem" },
+    "lg": { "value": "0.875rem" },
+    "pill": { "value": "999px" }
+  },
+  "borderWidth": {
+    "thin": { "value": "1px" },
+    "thick": { "value": "2px" }
+  },
+  "shadow": {
+    "sm": { "value": "0 10px 20px rgba(8, 29, 42, 0.2)" },
+    "md": { "value": "0 20px 42px rgba(8, 29, 42, 0.26)" },
+    "focus": { "value": "0 0 0 3px rgba(156, 183, 202, 0.42)" }
+  },
+  "motion": {
+    "duration": {
+      "fast": { "value": "120ms" },
+      "base": { "value": "220ms" },
+      "slow": { "value": "340ms" }
+    },
+    "easing": {
+      "standard": { "value": "cubic-bezier(0.2, 0, 0, 1)" },
+      "emphasized": { "value": "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+    }
+  },
+  "zIndex": {
+    "base": { "value": 0 },
+    "header": { "value": 100 },
+    "overlay": { "value": 1000 }
+  },
+  "component": {
+    "header": {
+      "background": { "value": "{color.surface.header}" },
+      "text": { "value": "{color.text.onBrand}" },
+      "subtitleOpacity": { "value": 0.9 }
+    },
+    "glass": {
+      "background": { "value": "rgba(255, 255, 255, 0.12)" },
+      "border": { "value": "rgba(255, 255, 255, 0.28)" },
+      "blur": { "value": "14px" }
+    },
+    "sectionCard": {
+      "background": { "value": "{color.surface.card}" },
+      "border": { "value": "{color.border.subtle}" },
+      "radius": { "value": "{radius.lg}" },
+      "shadow": { "value": "{shadow.sm}" },
+      "padding": { "value": "{space.6}" }
+    },
+    "linkItem": {
+      "background": { "value": "{color.surface.section}" },
+      "text": { "value": "{color.text.link}" },
+      "hoverBackground": { "value": "#E4F2FA" },
+      "hoverText": { "value": "{color.text.linkHover}" },
+      "radius": { "value": "{radius.md}" },
+      "paddingY": { "value": "{space.3}" },
+      "paddingX": { "value": "{space.4}" }
+    }
+  }
+}
