@@ -46,12 +46,30 @@ function decorateTrackButtons() {
     const titleText = button.textContent ? button.textContent.trim() : 'Faixa';
 
     button.dataset.kind = kind;
-    button.innerHTML = `<span class="track-name">${titleText}</span><span class="track-kind">${getKindLabel(kind)}</span>`;
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'track-name';
+    nameSpan.textContent = titleText;
+
+    const kindSpan = document.createElement('span');
+    kindSpan.className = 'track-kind';
+    kindSpan.textContent = getKindLabel(kind);
+
+    button.replaceChildren(nameSpan, kindSpan);
   });
 }
 
 function isYouTube(url) {
-  return /(?:youtube\.com|youtu\.be)/i.test(url);
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname === 'www.youtube.com' ||
+      parsed.hostname === 'youtube.com' ||
+      parsed.hostname === 'youtu.be' ||
+      parsed.hostname === 'www.youtu.be' ||
+      parsed.hostname === 'music.youtube.com';
+  } catch (error) {
+    return false;
+  }
 }
 
 function isDriveFolder(url) {
@@ -62,11 +80,11 @@ function extractYouTubeId(url) {
   try {
     const parsed = new URL(url);
 
-    if (parsed.hostname.includes('youtu.be')) {
+    if (parsed.hostname === 'youtu.be' || parsed.hostname === 'www.youtu.be') {
       return parsed.pathname.split('/').filter(Boolean)[0] || '';
     }
 
-    if (parsed.hostname.includes('youtube.com')) {
+    if (parsed.hostname === 'www.youtube.com' || parsed.hostname === 'youtube.com' || parsed.hostname === 'music.youtube.com') {
       return parsed.searchParams.get('v') || '';
     }
   } catch (error) {
@@ -138,7 +156,7 @@ function applyPreviewToElements(f, ph, pt, ol, url, title) {
     f.removeAttribute('src');
     f.style.display = 'none';
     ph.style.display = 'grid';
-    ph.textContent = 'YouTube pode bloquear embed em arquivo local (erro 153). Abra via localhost para exibir o video na pagina.';
+    ph.textContent = 'YouTube pode bloquear embed em arquivo local (erro 153). Abra via localhost para exibir o vídeo na página.';
     return;
   }
 
@@ -146,7 +164,7 @@ function applyPreviewToElements(f, ph, pt, ol, url, title) {
     f.removeAttribute('src');
     f.style.display = 'none';
     ph.style.display = 'grid';
-    ph.textContent = 'Este item e uma pasta do Google Drive e foi aberto em nova aba.';
+    ph.textContent = 'Este item é uma pasta do Google Drive e foi aberto em nova aba.';
     return;
   }
 
@@ -162,7 +180,7 @@ function applyPreviewToElements(f, ph, pt, ol, url, title) {
   f.removeAttribute('src');
   f.style.display = 'none';
   ph.style.display = 'grid';
-  ph.textContent = 'Nao foi possivel gerar preview para este link. Use "Abrir original".';
+  ph.textContent = 'Não foi possível gerar preview para este link. Use "Abrir original".';
 }
 
 function createInlinePlayer(voiceCard) {
@@ -184,7 +202,7 @@ function createInlinePlayer(voiceCard) {
         ' referrerpolicy="strict-origin-when-cross-origin"' +
       '></iframe>' +
       '<div class="player-hint">' +
-        'Toque em uma musica para abrir o preview aqui.' +
+        'Toque em uma música para abrir o preview aqui.' +
       '</div>' +
     '</div>';
   voiceCard.appendChild(inlinePlayer);
