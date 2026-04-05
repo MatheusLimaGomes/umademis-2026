@@ -186,25 +186,46 @@ function applyPreviewToElements(f, ph, pt, ol, url, title) {
 function createInlinePlayer(voiceCard) {
   const inlinePlayer = document.createElement('div');
   inlinePlayer.className = 'inline-player glass';
-  inlinePlayer.setAttribute('aria-label', 'Preview da midia');
-  inlinePlayer.innerHTML =
-    '<div class="player-header">' +
-      '<h2 class="inline-player-title">Selecione uma faixa</h2>' +
-      '<a class="inline-player-link" href="#" target="_blank" rel="noopener noreferrer">Abrir original</a>' +
-    '</div>' +
-    '<div class="player-frame-wrap">' +
-      '<iframe' +
-        ' class="inline-frame"' +
-        ' title="Preview de audio"' +
-        ' loading="lazy"' +
-        ' allow="autoplay; encrypted-media; picture-in-picture"' +
-        ' allowfullscreen' +
-        ' referrerpolicy="strict-origin-when-cross-origin"' +
-      '></iframe>' +
-      '<div class="player-hint">' +
-        'Toque em uma música para abrir o preview aqui.' +
-      '</div>' +
-    '</div>';
+  inlinePlayer.setAttribute('aria-label', 'Preview da mídia');
+
+  const header = document.createElement('div');
+  header.className = 'player-header';
+
+  const title = document.createElement('h2');
+  title.className = 'inline-player-title';
+  title.textContent = 'Selecione uma faixa';
+
+  const link = document.createElement('a');
+  link.className = 'inline-player-link';
+  link.href = '#';
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = 'Abrir original';
+
+  header.appendChild(title);
+  header.appendChild(link);
+
+  const frameWrap = document.createElement('div');
+  frameWrap.className = 'player-frame-wrap';
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'inline-frame';
+  iframe.title = 'Preview de audio';
+  iframe.loading = 'lazy';
+  iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+  const hint = document.createElement('div');
+  hint.className = 'player-hint';
+  hint.textContent = 'Toque em uma música para abrir o preview aqui.';
+
+  frameWrap.appendChild(iframe);
+  frameWrap.appendChild(hint);
+
+  inlinePlayer.appendChild(header);
+  inlinePlayer.appendChild(frameWrap);
+
   voiceCard.appendChild(inlinePlayer);
   return inlinePlayer;
 }
