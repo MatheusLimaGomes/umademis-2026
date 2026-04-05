@@ -1,0 +1,71 @@
+name: GitHub Pages – Feature Branch Deploy
+
+on:
+  push:
+    branches:
+      - feature/**
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy-feature-preview:
+    name: Deploy feature preview to GitHub Pages
+    runs-on: ubuntu-latest
+    environment:
+      # GitHub Pages supports a single active deployment per repository.
+      # The most recent feature branch push will be the visible preview.
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        if: hashFiles('package-lock.json') != ''
+        run: npm ci
+
+      - name: Build
+        if: hashFiles('package-lock.json') != ''
+        run: npm run --if-present build
+
+      - name: Resolve deploy directory
+        id: dirs
+        # Falls back to the repo root for static sites with no build step.
+        # actions/upload-pages-artifact excludes .git automatically.
+        run: |
+          if [ -d "dist" ]; then
+            echo "source=dist" >> "$GITHUB_OUTPUT"
+          elif [ -d "build" ]; then
+            echo "source=build" >> "$GITHUB_OUTPUT"
+          elif [ -d "out" ]; then
+            echo "source=out" >> "$GITHUB_OUTPUT"
+          elif [ -d "public" ]; then
+            echo "source=public" >> "$GITHUB_OUTPUT"
+          else
+            echo "source=." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.dirs.outputs.source }}
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
