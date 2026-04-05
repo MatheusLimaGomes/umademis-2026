@@ -210,7 +210,7 @@ function createInlinePlayer(voiceCard) {
 
   const iframe = document.createElement('iframe');
   iframe.className = 'inline-frame';
-  iframe.title = 'Preview de audio';
+  iframe.title = 'Preview de áudio';
   iframe.loading = 'lazy';
   iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
   iframe.allowFullscreen = true;
