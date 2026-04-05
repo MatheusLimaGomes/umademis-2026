@@ -3,6 +3,8 @@ const frame = document.getElementById('preview-frame');
 const playerHint = document.getElementById('player-hint');
 const playerTitle = document.getElementById('player-title');
 const openLink = document.getElementById('open-link');
+const voiceCards = Array.from(document.querySelectorAll('.voice-card'));
+const inlinePlayerMap = new Map();
 const heroLogos = [
   {
     mark: document.querySelector('.hero-mark:not(.hero-mark-right)'),
@@ -126,50 +128,123 @@ function clearActive() {
   trackButtons.forEach((button) => button.classList.remove('active'));
 }
 
-function selectTrack(button) {
-  const url = button.dataset.url || '';
-  const title = button.dataset.title || 'Faixa';
+function applyPreviewToElements(f, ph, pt, ol, url, title) {
   const kind = getLinkKind(url);
 
-  clearActive();
-  button.classList.add('active');
-  playerTitle.textContent = title;
-  openLink.href = url;
+  pt.textContent = title;
+  ol.href = url;
 
   if (kind === 'youtube' && window.location.protocol === 'file:') {
-    frame.removeAttribute('src');
-    frame.style.display = 'none';
-    playerHint.style.display = 'grid';
-    playerHint.textContent = 'YouTube pode bloquear embed em arquivo local (erro 153). Abra via localhost para exibir o video na pagina.';
+    f.removeAttribute('src');
+    f.style.display = 'none';
+    ph.style.display = 'grid';
+    ph.textContent = 'YouTube pode bloquear embed em arquivo local (erro 153). Abra via localhost para exibir o video na pagina.';
     return;
   }
 
   if (isDriveFolder(url)) {
-    frame.removeAttribute('src');
-    frame.style.display = 'none';
-    playerHint.style.display = 'grid';
-    playerHint.textContent = 'Este item e uma pasta do Google Drive e foi aberto em nova aba.';
-    window.open(url, '_blank', 'noopener,noreferrer');
+    f.removeAttribute('src');
+    f.style.display = 'none';
+    ph.style.display = 'grid';
+    ph.textContent = 'Este item e uma pasta do Google Drive e foi aberto em nova aba.';
     return;
   }
 
   const embeddableUrl = getEmbeddableUrl(url);
 
   if (embeddableUrl) {
-    frame.src = embeddableUrl;
-    frame.style.display = 'block';
-    playerHint.style.display = 'none';
+    f.src = embeddableUrl;
+    f.style.display = 'block';
+    ph.style.display = 'none';
     return;
   }
 
-  frame.removeAttribute('src');
-  frame.style.display = 'none';
-  playerHint.style.display = 'grid';
-  playerHint.textContent = 'Nao foi possivel gerar preview para este link. Use "Abrir original".';
+  f.removeAttribute('src');
+  f.style.display = 'none';
+  ph.style.display = 'grid';
+  ph.textContent = 'Nao foi possivel gerar preview para este link. Use "Abrir original".';
+}
+
+function createInlinePlayer(voiceCard) {
+  const inlinePlayer = document.createElement('div');
+  inlinePlayer.className = 'inline-player glass';
+  inlinePlayer.setAttribute('aria-label', 'Preview da midia');
+  inlinePlayer.innerHTML =
+    '<div class="player-header">' +
+      '<h2 class="inline-player-title">Selecione uma faixa</h2>' +
+      '<a class="inline-player-link" href="#" target="_blank" rel="noopener noreferrer">Abrir original</a>' +
+    '</div>' +
+    '<div class="player-frame-wrap">' +
+      '<iframe' +
+        ' class="inline-frame"' +
+        ' title="Preview de audio"' +
+        ' loading="lazy"' +
+        ' allow="autoplay; encrypted-media; picture-in-picture"' +
+        ' allowfullscreen' +
+        ' referrerpolicy="strict-origin-when-cross-origin"' +
+      '></iframe>' +
+      '<div class="player-hint">' +
+        'Toque em uma musica para abrir o preview aqui.' +
+      '</div>' +
+    '</div>';
+  voiceCard.appendChild(inlinePlayer);
+  return inlinePlayer;
+}
+
+function initInlinePlayers() {
+  voiceCards.forEach((card) => {
+    inlinePlayerMap.set(card, createInlinePlayer(card));
+  });
+}
+
+function selectTrack(button, scrollIntoView) {
+  const url = button.dataset.url || '';
+  const title = button.dataset.title || 'Faixa';
+
+  clearActive();
+  button.classList.add('active');
+
+  if (isDriveFolder(url)) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  applyPreviewToElements(frame, playerHint, playerTitle, openLink, url, title);
+
+  const parentCard = button.closest('.voice-card');
+
+  inlinePlayerMap.forEach((inlinePlayer, card) => {
+    if (card !== parentCard) {
+      if (inlinePlayer.classList.contains('is-active')) {
+        inlinePlayer.classList.remove('is-active');
+        const inlineFrame = inlinePlayer.querySelector('.inline-frame');
+        if (inlineFrame) {
+          inlineFrame.removeAttribute('src');
+          inlineFrame.style.display = 'none';
+        }
+      }
+    }
+  });
+
+  if (parentCard) {
+    const inlinePlayer = inlinePlayerMap.get(parentCard);
+    if (inlinePlayer) {
+      const inlineFrame = inlinePlayer.querySelector('.inline-frame');
+      const inlineHint = inlinePlayer.querySelector('.player-hint');
+      const inlineTitle = inlinePlayer.querySelector('.inline-player-title');
+      const inlineLink = inlinePlayer.querySelector('.inline-player-link');
+
+      applyPreviewToElements(inlineFrame, inlineHint, inlineTitle, inlineLink, url, title);
+      inlinePlayer.classList.add('is-active');
+
+      if (scrollIntoView) {
+        inlinePlayer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
 }
 
 trackButtons.forEach((button) => {
-  button.addEventListener('click', () => selectTrack(button));
+  button.addEventListener('click', () => selectTrack(button, true));
 });
 
 heroLogos.forEach(({ mark, image }) => {
@@ -192,6 +267,8 @@ heroLogos.forEach(({ mark, image }) => {
 
 decorateTrackButtons();
 
+initInlinePlayers();
+
 if (trackButtons.length > 0) {
-  selectTrack(trackButtons[0]);
+  selectTrack(trackButtons[0], false);
 }
