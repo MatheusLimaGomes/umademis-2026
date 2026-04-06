@@ -3,6 +3,24 @@ const frame = document.getElementById('preview-frame');
 const playerHint = document.getElementById('player-hint');
 const playerTitle = document.getElementById('player-title');
 const openLink = document.getElementById('open-link');
+const layout = document.querySelector('.layout');
+const playlist = document.querySelector('.playlist');
+const player = document.querySelector('.player');
+
+function isMobileViewport() {
+  return window.matchMedia('(max-width: 759px)').matches;
+}
+
+function placePlayerAfterCard(voiceCard) {
+  if (voiceCard) {
+    voiceCard.after(player);
+  }
+}
+
+function placePlayerInLayout() {
+  layout.appendChild(player);
+}
+
 const heroLogos = [
   {
     mark: document.querySelector('.hero-mark:not(.hero-mark-right)'),
@@ -136,6 +154,11 @@ function selectTrack(button) {
   playerTitle.textContent = title;
   openLink.href = url;
 
+  if (isMobileViewport()) {
+    const voiceCard = button.closest('.voice-card');
+    placePlayerAfterCard(voiceCard);
+  }
+
   if (kind === 'youtube' && window.location.protocol === 'file:') {
     frame.removeAttribute('src');
     frame.style.display = 'none';
@@ -169,7 +192,26 @@ function selectTrack(button) {
 }
 
 trackButtons.forEach((button) => {
-  button.addEventListener('click', () => selectTrack(button));
+  button.addEventListener('click', () => {
+    selectTrack(button);
+    if (isMobileViewport()) {
+      setTimeout(() => {
+        player.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  });
+});
+
+window.addEventListener('resize', () => {
+  if (!isMobileViewport()) {
+    placePlayerInLayout();
+  } else {
+    const activeButton = trackButtons.find((b) => b.classList.contains('active'));
+    if (activeButton) {
+      const voiceCard = activeButton.closest('.voice-card');
+      placePlayerAfterCard(voiceCard);
+    }
+  }
 });
 
 heroLogos.forEach(({ mark, image }) => {
