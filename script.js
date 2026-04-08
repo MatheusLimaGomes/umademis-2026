@@ -3,6 +3,11 @@ const frame = document.getElementById('preview-frame');
 const playerHint = document.getElementById('player-hint');
 const playerTitle = document.getElementById('player-title');
 const openLink = document.getElementById('open-link');
+const layout = document.querySelector('.layout');
+const playlist = document.querySelector('.playlist');
+const player = document.querySelector('.player');
+const desktopBreakpoint = window.matchMedia('(min-width: 1040px)');
+const playerOriginalAnchor = document.createComment('player-original-anchor');
 const heroLogos = [
   {
     mark: document.querySelector('.hero-mark:not(.hero-mark-right)'),
@@ -13,6 +18,10 @@ const heroLogos = [
     image: document.getElementById('hero-umademis-logo')
   }
 ];
+
+if (layout && player) {
+  layout.insertBefore(playerOriginalAnchor, player);
+}
 
 function getLinkKind(url) {
   if (isYouTube(url)) {
@@ -126,6 +135,37 @@ function clearActive() {
   trackButtons.forEach((button) => button.classList.remove('active'));
 }
 
+function restorePlayerToLayout() {
+  if (!layout || !player || !playerOriginalAnchor.parentNode) {
+    return;
+  }
+
+  playerOriginalAnchor.parentNode.insertBefore(player, playerOriginalAnchor.nextSibling);
+}
+
+function placePlayerAfterVoiceCard(button) {
+  if (!playlist || !player || !button) {
+    return;
+  }
+
+  const voiceCard = button.closest('.voice-card');
+
+  if (!voiceCard || voiceCard.parentNode !== playlist) {
+    return;
+  }
+
+  voiceCard.insertAdjacentElement('afterend', player);
+}
+
+function syncPlayerPlacement(button) {
+  if (desktopBreakpoint.matches) {
+    restorePlayerToLayout();
+    return;
+  }
+
+  placePlayerAfterVoiceCard(button);
+}
+
 function selectTrack(button) {
   const url = button.dataset.url || '';
   const title = button.dataset.title || 'Faixa';
@@ -133,6 +173,7 @@ function selectTrack(button) {
 
   clearActive();
   button.classList.add('active');
+  syncPlayerPlacement(button);
   playerTitle.textContent = title;
   openLink.href = url;
 
@@ -191,6 +232,14 @@ heroLogos.forEach(({ mark, image }) => {
 });
 
 decorateTrackButtons();
+
+window.addEventListener('resize', () => {
+  const activeButton = document.querySelector('.track.active');
+
+  if (activeButton) {
+    syncPlayerPlacement(activeButton);
+  }
+});
 
 if (trackButtons.length > 0) {
   selectTrack(trackButtons[0]);
