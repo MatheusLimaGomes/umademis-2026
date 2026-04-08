@@ -2,6 +2,10 @@
 
 Pagina web estatica para organizar e acessar links de estudo por naipe (Soprano, Contralto e Tenor) do Congresso Umademis 2026.
 
+## 🌐 Pagina publicada
+
+👉 **https://matheuslimagomes.github.io/umademis-2026/**
+
 ## Objetivo
 
 Centralizar os links de audios/videos do repertorio em uma interface simples, responsiva e facil de usar em celular e desktop.
@@ -12,7 +16,7 @@ Centralizar os links de audios/videos do repertorio em uma interface simples, re
 - CSS3
 - JavaScript (vanilla)
 - GitHub Actions (automacao CI/CD)
-- Netlify (preview e producao)
+- GitHub Pages (hospedagem)
 
 ## Estrutura do projeto
 
@@ -20,10 +24,7 @@ Centralizar os links de audios/videos do repertorio em uma interface simples, re
 .
 ├── .github/
 │   └── workflows/
-│       ├── 01-open-pr-from-feature.yml
-│       ├── 02-deploy-preview-pr.yml
-│       ├── 03-auto-merge-approved-pr.yml
-│       └── 04-deploy-production-main.yml
+│       └── static.yml
 ├── assets/
 ├── design-tokens.json
 ├── index.html
@@ -69,57 +70,25 @@ O projeto possui duas fontes de tokens:
 Padrao trunk-based simplificado:
 
 1. Desenvolver em branch `feature/*`.
-2. Ao fazer push na branch de feature, um PR para `main` e aberto automaticamente.
-3. Ao abrir/atualizar PR, o ambiente de preview e publicado.
-4. Apos aprovacao do PR, o merge e executado automaticamente (squash).
-5. Push em `main` dispara deploy de producao.
+2. Abrir PR para `main`.
+3. Apos merge em `main`, o deploy de producao e disparado automaticamente.
 
 ## Etapa de CI/CD
 
-Esta etapa ja esta configurada em `.github/workflows` e usa GitHub Actions + Netlify CLI.
+Esta etapa ja esta configurada em `.github/workflows` e usa GitHub Actions + GitHub Pages.
 
-### 1) Abertura automatica de PR
+### Deploy automatico para GitHub Pages
 
-Arquivo: `.github/workflows/01-open-pr-from-feature.yml`
+Arquivo: `.github/workflows/static.yml`
 
-- Gatilho: `push` em `feature/**`
-- Acao: abre (ou atualiza) PR para `main`
-- Objetivo: padronizar entrada de mudancas na branch principal
-
-### 2) Deploy de preview por PR
-
-Arquivo: `.github/workflows/02-deploy-preview-pr.yml`
-
-- Gatilho: eventos de `pull_request` para `main`
-- Condicao: apenas PRs com branch de origem `feature/*`
-- Acao: faz deploy no Netlify com alias `pr-<numero-do-pr>`
-- Objetivo: validar visual e comportamento antes do merge
-
-### 3) Auto-merge apos aprovacao
-
-Arquivo: `.github/workflows/03-auto-merge-approved-pr.yml`
-
-- Gatilho: `pull_request_review` submetido
-- Condicao: review `approved`, base `main`, origem `feature/*`
-- Acao: merge automatico via API do GitHub (`squash`)
-- Objetivo: acelerar integracao de mudancas aprovadas
-
-### 4) Deploy de producao na main
-
-Arquivo: `.github/workflows/04-deploy-production-main.yml`
-
-- Gatilho: `push` em `main`
-- Acao: deploy de producao no Netlify (`--prod`)
-- Objetivo: publicar automaticamente a versao oficial
+- Gatilho: `push` em `main` ou execucao manual via Actions
+- Acao: faz upload do conteudo estatico e publica no GitHub Pages
+- URL publicada: https://matheuslimagomes.github.io/umademis-2026/
+- Objetivo: publicar automaticamente a versao oficial a cada push na branch principal
 
 ## Secrets necessarios
 
-Para os workflows de deploy funcionarem, configure no repositorio:
-
-- `NETLIFY_AUTH_TOKEN`
-- `NETLIFY_SITE_ID`
-
-Tambem e usado:
+Para o workflow de deploy funcionar, nenhum secret adicional e necessario alem do:
 
 - `GITHUB_TOKEN` (fornecido automaticamente pelo GitHub Actions)
 
