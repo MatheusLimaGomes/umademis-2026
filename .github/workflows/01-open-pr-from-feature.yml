@@ -20,16 +20,28 @@ jobs:
           fetch-depth: 0
 
       - name: Open or update PR
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: ${{ github.ref_name }}
-          destination_branch: main
-          pr_title: "${{ github.ref_name }} -> main"
-          pr_body: |
-            PR automatico gerado pelo fluxo trunk-based.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ github.ref_name }}"
 
-            - Branch de origem: `${{ github.ref_name }}`
-            - Branch de destino: `main`
+          EXISTING_PR=$(gh pr list \
+            --head "$BRANCH" \
+            --base main \
+            --json number \
+            --jq '.[0].number' 2>/dev/null || true)
 
-            Apos aprovacao, o merge sera executado automaticamente por este workflow.
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR ja existe para a branch $BRANCH"
+          else
+            gh pr create \
+              --head "$BRANCH" \
+              --base main \
+              --title "$BRANCH -> main" \
+              --body "PR automatico gerado pelo fluxo trunk-based.
+
+- Branch de origem: \`$BRANCH\`
+- Branch de destino: \`main\`
+
+Apos aprovacao, o merge sera executado automaticamente por este workflow."
+          fi

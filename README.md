@@ -97,3 +97,4 @@ Para o workflow de deploy funcionar, nenhum secret adicional e necessario alem d
 - Validar se links de Drive/YouTube continuam ativos.
 - Manter nomes de branch no padrao `feature/*` para acionar automacoes.
 - Atualizar `design-tokens.json` e `tokens.css` em conjunto para evitar inconsistencias visuais.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e483d506-fd48-4f75-9b38-e1c9cd7a6811/deploy-status)](https://app.netlify.com/projects/congresso-umademis-2026/deploys)
